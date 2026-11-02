@@ -17,3 +17,24 @@ export type Book = {
   };
   createdAt: string;
 };
+
+type GetBooksOptions = {
+  category?: string;
+  limit?: number;
+};
+
+export async function getBooks({ category, limit }: GetBooksOptions = {}) {
+  const query = new URLSearchParams();
+  if (category) query.set("category", category);
+  if (limit) query.set("limit", String(limit));
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books?${query}`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load books.");
+  }
+
+  return (await response.json()) as Book[];
+}
