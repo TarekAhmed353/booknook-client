@@ -18,6 +18,29 @@ export type Book = {
   createdAt: string;
 };
 
+export type Borrow = {
+  _id: string;
+  bookId: string;
+  bookTitle: string;
+  bookImage: string;
+  userEmail: string;
+  userName: string;
+  borrowDate: string;
+  returnDate: string;
+};
+
+export function copiesText(available: number, total: number) {
+  return `${available} of ${total} ${total === 1 ? "copy" : "copies"} available`;
+}
+
+export function formatDate(value: string | Date) {
+  return new Date(value).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 type GetBooksOptions = {
   category?: string;
   limit?: number;

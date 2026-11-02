@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import type { Book } from "@/lib/books";
+import { copiesText, type Book } from "@/lib/books";
 import { cn } from "@/lib/utils";
 
 type BookCardProps = {
@@ -35,9 +35,7 @@ export function BookCard({ book }: BookCardProps) {
             available ? "text-green-700 dark:text-green-400" : "text-destructive"
           )}
         >
-          {available
-            ? `${book.availableCopies} of ${book.totalCopies} copies available`
-            : "Not Available"}
+          {available ? copiesText(book.availableCopies, book.totalCopies) : "Not Available"}
         </p>
         <Button asChild className="mt-5 w-full">
           <Link href={`/books/${book._id}`}>View Details</Link>

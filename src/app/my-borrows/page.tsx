@@ -1,16 +1,23 @@
 import type { Metadata } from "next";
+import { getMyBorrows } from "@/lib/server-api";
+import { SectionHeading } from "@/components/section-heading";
+import { MyBorrowsTable } from "@/components/my-borrows-table";
 
 export const metadata: Metadata = {
   title: "My Borrows",
 };
 
-export default function MyBorrowsPage() {
+export default async function MyBorrowsPage() {
+  const borrows = await getMyBorrows();
+
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-16">
-      <h1 className="text-4xl font-semibold text-primary">My Borrows</h1>
-      <p className="mt-3 text-muted-foreground">
-        The books you borrowed, with their return dates, will go here.
-      </p>
+      <SectionHeading
+        tag="Your reading list"
+        title="My Borrows"
+        text="Books you have borrowed. Please return them by the date shown."
+      />
+      <MyBorrowsTable borrows={borrows} />
     </main>
   );
 }
