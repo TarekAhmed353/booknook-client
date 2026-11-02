@@ -44,12 +44,14 @@ export function formatDate(value: string | Date) {
 type GetBooksOptions = {
   category?: string;
   limit?: number;
+  email?: string;
 };
 
-export async function getBooks({ category, limit }: GetBooksOptions = {}) {
+export async function getBooks({ category, limit, email }: GetBooksOptions = {}) {
   const query = new URLSearchParams();
   if (category) query.set("category", category);
   if (limit) query.set("limit", String(limit));
+  if (email) query.set("email", email);
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books?${query}`, {
     cache: "no-store",
