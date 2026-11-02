@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { getBooks } from "@/lib/books";
 import { SectionHeading } from "@/components/section-heading";
 import { MyBookCard } from "@/components/my-book-card";
+import { Stagger, StaggerItem } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -44,11 +45,13 @@ export default async function MyBooksPage() {
           </Button>
         </div>
       ) : (
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {books.map((book) => (
-            <MyBookCard key={book._id} book={book} />
+            <StaggerItem key={book._id} className="h-full">
+              <MyBookCard book={book} />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       )}
     </main>
   );

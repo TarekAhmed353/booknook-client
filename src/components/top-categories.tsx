@@ -8,6 +8,7 @@ import {
   ToyBrick,
 } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
+import { Stagger, StaggerItem } from "@/components/motion";
 
 const categories = [
   {
@@ -46,9 +47,9 @@ export function TopCategories() {
           title="Browse by category"
           text="Every book on BookNook sits on one of these five shelves."
         />
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {categories.map((category) => (
-            <li key={category.name}>
+            <StaggerItem key={category.name} className="h-full">
               <Link
                 href={`/books?category=${category.name}`}
                 className="group flex h-full flex-col items-center rounded-2xl border bg-card p-6 text-center transition-all hover:-translate-y-1 hover:border-primary hover:shadow-md"
@@ -65,9 +66,9 @@ export function TopCategories() {
                   <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
-            </li>
+            </StaggerItem>
           ))}
-        </ul>
+        </Stagger>
       </div>
     </section>
   );

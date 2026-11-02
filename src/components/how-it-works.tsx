@@ -1,5 +1,6 @@
 import { BookCheck, Search, Undo2 } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
+import { Stagger, StaggerItem } from "@/components/motion";
 
 const steps = [
   {
@@ -28,9 +29,9 @@ export function HowItWorks() {
           title="Three steps, no library card"
           text="Borrowing from BookNook takes less than a minute."
         />
-        <ol className="mt-12 grid gap-6 md:grid-cols-3">
+        <Stagger className="mt-12 grid gap-6 md:grid-cols-3">
           {steps.map((step, index) => (
-            <li
+            <StaggerItem
               key={step.title}
               className="relative flex h-full flex-col rounded-2xl border bg-card p-8 shadow-sm"
             >
@@ -42,9 +43,9 @@ export function HowItWorks() {
               </span>
               <h3 className="mt-6 text-xl font-semibold">{step.title}</h3>
               <p className="mt-2 text-muted-foreground">{step.text}</p>
-            </li>
+            </StaggerItem>
           ))}
-        </ol>
+        </Stagger>
       </div>
     </section>
   );

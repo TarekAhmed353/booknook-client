@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { motion, type Variants } from "motion/react";
 import { Button } from "@/components/ui/button";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -32,6 +33,22 @@ const slides = [
   },
 ];
 
+const slideContent: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+  },
+};
+
+const slideItem: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
 export function Banner() {
   return (
     <section className="mx-auto w-full max-w-7xl px-4 pt-6">
@@ -54,26 +71,44 @@ export function Banner() {
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.title}>
-            <div
-              className="dark relative flex h-[440px] items-center bg-background bg-cover bg-center md:h-[520px]"
-              style={{ backgroundImage: `url(${slide.image})` }}
-            >
-              <div className="absolute inset-0 bg-linear-to-r from-background/95 via-background/70 to-background/10" />
-              <div className="relative max-w-2xl px-6 sm:px-10 md:px-20">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brass">
-                  {slide.tag}
-                </p>
-                <h2 className="mt-3 text-4xl leading-tight font-semibold text-foreground md:text-6xl">
-                  {slide.title}
-                </h2>
-                <p className="mt-4 max-w-lg text-base text-muted-foreground md:text-lg">
-                  {slide.text}
-                </p>
-                <Button asChild size="lg" className="mt-8">
-                  <Link href="/books">Browse Books</Link>
-                </Button>
+            {({ isActive }) => (
+              <div
+                className="dark relative flex h-110 items-center bg-background bg-cover bg-center md:h-130"
+                style={{ backgroundImage: `url(${slide.image})` }}
+              >
+                <div className="absolute inset-0 bg-linear-to-r from-background/95 via-background/70 to-background/10" />
+                <motion.div
+                  className="relative max-w-2xl px-6 sm:px-10 md:px-20"
+                  variants={slideContent}
+                  initial="hidden"
+                  animate={isActive ? "show" : "hidden"}
+                >
+                  <motion.p
+                    variants={slideItem}
+                    className="text-xs font-semibold uppercase tracking-[0.25em] text-brass"
+                  >
+                    {slide.tag}
+                  </motion.p>
+                  <motion.h2
+                    variants={slideItem}
+                    className="mt-3 text-4xl leading-tight font-semibold text-foreground md:text-6xl"
+                  >
+                    {slide.title}
+                  </motion.h2>
+                  <motion.p
+                    variants={slideItem}
+                    className="mt-4 max-w-lg text-base text-muted-foreground md:text-lg"
+                  >
+                    {slide.text}
+                  </motion.p>
+                  <motion.div variants={slideItem}>
+                    <Button asChild size="lg" className="mt-8">
+                      <Link href="/books">Browse Books</Link>
+                    </Button>
+                  </motion.div>
+                </motion.div>
               </div>
-            </div>
+            )}
           </SwiperSlide>
         ))}
       </Swiper>

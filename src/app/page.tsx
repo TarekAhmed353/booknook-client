@@ -6,6 +6,7 @@ import { BookCard } from "@/components/book-card";
 import { SectionHeading } from "@/components/section-heading";
 import { HowItWorks } from "@/components/how-it-works";
 import { TopCategories } from "@/components/top-categories";
+import { Stagger, StaggerItem } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { getBooks, type Book } from "@/lib/books";
 
@@ -43,11 +44,13 @@ export default async function Home() {
               No books yet. Add the first one!
             </p>
           ) : (
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {books.map((book) => (
-                <BookCard key={book._id} book={book} />
+                <StaggerItem key={book._id} className="h-full">
+                  <BookCard book={book} />
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           )}
 
           <div className="mt-12 text-center">

@@ -3,6 +3,7 @@ import { Fraunces, Inter } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { MotionProvider } from "@/components/motion";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -37,10 +38,12 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <Footer />
-          <Toaster richColors position="top-center" />
+          <MotionProvider>
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <Footer />
+            <Toaster richColors position="top-center" />
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>

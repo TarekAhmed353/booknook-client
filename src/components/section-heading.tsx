@@ -1,3 +1,5 @@
+import { FadeUp } from "@/components/motion";
+
 type SectionHeadingProps = {
   tag: string;
   title: string;
@@ -6,7 +8,7 @@ type SectionHeadingProps = {
 
 export function SectionHeading({ tag, title, text }: SectionHeadingProps) {
   return (
-    <div className="mx-auto max-w-2xl text-center">
+    <FadeUp className="mx-auto max-w-2xl text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brass">
         {tag}
       </p>
@@ -14,6 +16,6 @@ export function SectionHeading({ tag, title, text }: SectionHeadingProps) {
         {title}
       </h2>
       {text && <p className="mt-3 text-muted-foreground">{text}</p>}
-    </div>
+    </FadeUp>
   );
 }

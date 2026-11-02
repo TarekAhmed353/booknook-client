@@ -22,6 +22,10 @@ type MyBorrowsTableProps = {
   borrows: Borrow[];
 };
 
+function isOverdue(returnDate: string) {
+  return new Date(returnDate).getTime() < Date.now();
+}
+
 export function MyBorrowsTable({ borrows }: MyBorrowsTableProps) {
   const router = useRouter();
   const [returningId, setReturningId] = useState<string | null>(null);
@@ -56,8 +60,6 @@ export function MyBorrowsTable({ borrows }: MyBorrowsTableProps) {
     );
   }
 
-  const now = Date.now();
-
   return (
     <div className="mt-10 rounded-2xl border bg-card shadow-sm">
       <Table>
@@ -72,7 +74,7 @@ export function MyBorrowsTable({ borrows }: MyBorrowsTableProps) {
         </TableHeader>
         <TableBody>
           {borrows.map((borrow) => {
-            const overdue = new Date(borrow.returnDate).getTime() < now;
+            const overdue = isOverdue(borrow.returnDate);
             const returning = returningId === borrow._id;
 
             return (

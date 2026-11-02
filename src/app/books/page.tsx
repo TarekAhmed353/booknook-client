@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BookCard } from "@/components/book-card";
 import { SectionHeading } from "@/components/section-heading";
+import { Stagger, StaggerItem } from "@/components/motion";
 import { categories, getBooks, type Book } from "@/lib/books";
 import { cn } from "@/lib/utils";
 
@@ -64,11 +65,16 @@ export default async function AllBooksPage({ searchParams }: AllBooksPageProps) 
           No books on this shelf yet. Be the first to add one!
         </p>
       ) : (
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger
+          key={activeCategory ?? "all"}
+          className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {books.map((book) => (
-            <BookCard key={book._id} book={book} />
+            <StaggerItem key={book._id} className="h-full">
+              <BookCard book={book} />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       )}
     </main>
   );
