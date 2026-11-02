@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col">
         <Navbar />
         <div className="flex-1">{children}</div>
+        <Footer />
       </body>
     </html>
   );
