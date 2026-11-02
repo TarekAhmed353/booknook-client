@@ -1,9 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut, Menu, UserRound } from "lucide-react";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
+import { getInitials } from "@/lib/initials";
+import { cn } from "@/lib/utils";
+import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetClose,
@@ -12,12 +26,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Logo } from "@/components/logo";
-import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const links = [
+const publicLinks = [
   { href: "/", label: "Home" },
   { href: "/books", label: "All Books" },
+];
+
+const privateLinks = [
   { href: "/add-book", label: "Add Book" },
   { href: "/my-books", label: "My Books" },
   { href: "/my-borrows", label: "My Borrows" },
@@ -25,6 +41,11 @@ const links = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
+
+  const links = user ? [...publicLinks, ...privateLinks] : publicLinks;
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -36,6 +57,13 @@ export function Navbar() {
         ? "bg-accent text-primary"
         : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
     );
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    toast.success("You have been logged out.");
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
@@ -55,12 +83,54 @@ export function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <Button asChild variant="ghost">
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/register">Register</Link>
-          </Button>
+          {isPending ? (
+            <Skeleton className="size-10 rounded-full" />
+          ) : user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  aria-label="Open user menu"
+                  className="rounded-full ring-offset-2 ring-offset-background transition hover:ring-2 hover:ring-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                >
+                  <Avatar className="size-10">
+                    <AvatarImage src={user.image ?? undefined} alt={user.name} />
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      {getInitials(user.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-60">
+                <DropdownMenuLabel className="font-normal">
+                  <p className="font-medium text-foreground">{user.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/profile">
+                    <UserRound />
+                    My Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={handleLogout}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <LogOut className="text-destructive" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button asChild variant="ghost">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         <Sheet>
@@ -80,6 +150,7 @@ export function Navbar() {
                 <Logo />
               </SheetTitle>
             </SheetHeader>
+
             <ul className="flex flex-col gap-1 px-4">
               {links.map((link) => (
                 <li key={link.href}>
@@ -94,17 +165,47 @@ export function Navbar() {
                 </li>
               ))}
             </ul>
-            <div className="mt-2 grid gap-2 px-4">
-              <SheetClose asChild>
-                <Button asChild variant="outline">
-                  <Link href="/login">Login</Link>
-                </Button>
-              </SheetClose>
-              <SheetClose asChild>
-                <Button asChild>
-                  <Link href="/register">Register</Link>
-                </Button>
-              </SheetClose>
+
+            <div className="mx-4 mt-2 border-t pt-4">
+              {user ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="size-10">
+                      <AvatarImage src={user.image ?? undefined} alt={user.name} />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {getInitials(user.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{user.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                    </div>
+                  </div>
+                  <SheetClose asChild>
+                    <Button asChild variant="outline" className="w-full">
+                      <Link href="/profile">My Profile</Link>
+                    </Button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button variant="destructive" className="w-full" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </SheetClose>
+                </div>
+              ) : (
+                <div className="grid gap-2">
+                  <SheetClose asChild>
+                    <Button asChild variant="outline">
+                      <Link href="/login">Login</Link>
+                    </Button>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Button asChild>
+                      <Link href="/register">Register</Link>
+                    </Button>
+                  </SheetClose>
+                </div>
+              )}
             </div>
           </SheetContent>
         </Sheet>
