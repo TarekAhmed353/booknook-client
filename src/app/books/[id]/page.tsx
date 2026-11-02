@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BookCopy, CalendarDays, UserRound } from "lucide-react";
 import { getBookById } from "@/lib/server-api";
-import { Button } from "@/components/ui/button";
+import { BorrowDialog } from "@/components/borrow-dialog";
 import { cn } from "@/lib/utils";
 
 type BookDetailsPageProps = {
@@ -102,9 +102,7 @@ export default async function BookDetailsPage({ params }: BookDetailsPageProps) 
           </dl>
 
           <div className="mt-10">
-            <Button size="lg" className="w-full sm:w-auto" disabled={!available}>
-              {available ? "Borrow This Book" : "Not Available"}
-            </Button>
+            <BorrowDialog bookId={book._id} bookTitle={book.title} available={available} />
           </div>
         </div>
       </div>
