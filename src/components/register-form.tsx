@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Check, Eye, EyeOff, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
+import { GoogleButton } from "@/components/google-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -161,6 +162,14 @@ export function RegisterForm() {
           Register
         </Button>
       </form>
+
+      <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
+        <span className="h-px flex-1 bg-border" />
+        or
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <GoogleButton redirectTo="/" label="Sign up with Google" />
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Already have an account?{" "}

@@ -97,7 +97,11 @@ export function Navbar() {
                     className="rounded-full ring-offset-2 ring-offset-background transition hover:ring-2 hover:ring-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                   >
                     <Avatar className="size-10">
-                      <AvatarImage src={user.image ?? undefined} alt={user.name} />
+                      <AvatarImage
+                        src={user.image ?? undefined}
+                        alt={user.name}
+                        referrerPolicy="no-referrer"
+                      />
                       <AvatarFallback className="bg-primary text-primary-foreground">
                         {getInitials(user.name)}
                       </AvatarFallback>
@@ -175,7 +179,11 @@ export function Navbar() {
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <Avatar className="size-10">
-                        <AvatarImage src={user.image ?? undefined} alt={user.name} />
+                        <AvatarImage
+                          src={user.image ?? undefined}
+                          alt={user.name}
+                          referrerPolicy="no-referrer"
+                        />
                         <AvatarFallback className="bg-primary text-primary-foreground">
                           {getInitials(user.name)}
                         </AvatarFallback>

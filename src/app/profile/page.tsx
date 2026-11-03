@@ -28,7 +28,11 @@ export default async function ProfilePage() {
     <main className="mx-auto flex w-full max-w-7xl justify-center px-4 py-16">
       <div className="w-full max-w-md rounded-2xl border bg-card p-8 text-center shadow-sm">
         <Avatar className="mx-auto size-24 ring-4 ring-accent">
-          <AvatarImage src={user.image ?? undefined} alt={user.name} />
+          <AvatarImage
+            src={user.image ?? undefined}
+            alt={user.name}
+            referrerPolicy="no-referrer"
+          />
           <AvatarFallback className="bg-primary text-2xl text-primary-foreground">
             {getInitials(user.name)}
           </AvatarFallback>
